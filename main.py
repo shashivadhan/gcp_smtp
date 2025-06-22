@@ -34,7 +34,7 @@ def fetch_service_account_data():
                 expiry_time = datetime.fromisoformat(expiry.replace("Z", "+00:00"))
                 remaining = (expiry_time - datetime.now(timezone.utc)).days
                 color = "🟥" if remaining <= 10 else "🟩"
-                report += f"{color} {email} | Key:  {key_id} | Expires in: {remaining} days\n"
+                report += f"{color} {email} | Key: {key_id} | Expires in: {remaining} days\n"
             else:
                 report += f"🟨 {email} | Key: {key_id} | No expiry set\n"
 
@@ -55,7 +55,7 @@ def send_notification(event, context):
         email.set_content(report)
         email["Subject"] = "🚨 GCP Service Account Key Expiry Audit 🚨"
         email["From"] = sender
-        email["To"] = recipients
+        email["To"] = ", ".join(recipients)  # ✅ Proper format
 
         with smtplib.SMTP_SSL(smtp_server, 465) as smtp:
             smtp.login(username, password)
