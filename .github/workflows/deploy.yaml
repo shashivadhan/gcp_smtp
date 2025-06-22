@@ -34,4 +34,5 @@ jobs:
           --entry-point send_notification \
           --source . \
           --region=us-central1 \
-          --set-env-vars "username=shashivadhan.gunti@gmail.com,password=mizazyfvnnusjcke,sender=shashivadhan.gunti@gmail.com,SMTP=smtp.gmail.com,recipients=shashivadhan.gunti@gmail.com"
+          --set-env-vars="username=${{ secrets.EMAIL_USERNAME }},password=${{ secrets.EMAIL_PASSWORD }},sender=${{ secrets.EMAIL_SENDER }},SMTP=${{ secrets.EMAIL_SMTP }},recipients=${{ secrets.EMAIL_RECIPIENTS }}"
+
