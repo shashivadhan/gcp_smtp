@@ -25,7 +25,6 @@ jobs:
 
     - name: Set up gcloud CLI
       uses: google-github-actions/setup-gcloud@v1
-      
     - name: Deploy Cloud Function
       run: |
         gcloud functions deploy send_notification \
@@ -34,6 +33,9 @@ jobs:
           --entry-point send_notification \
           --source . \
           --region=us-central1 \
-          --set-env-vars="username=${{ secrets.EMAIL_USERNAME }},password=${{ secrets.EMAIL_PASSWORD }},sender=${{ secrets.EMAIL_SENDER }},SMTP=${{ secrets.EMAIL_SMTP }},recipients='${{ secrets.EMAIL_RECIPIENTS }}'"
-
-    
+          --set-env-vars="\
+'username=${{ secrets.EMAIL_USERNAME }}',\
+'password=${{ secrets.EMAIL_PASSWORD }}',\
+'sender=${{ secrets.EMAIL_SENDER }}',\
+'SMTP=${{ secrets.EMAIL_SMTP }}',\
+'recipients=${{ secrets.EMAIL_RECIPIENTS }}'"
