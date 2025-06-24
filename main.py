@@ -34,7 +34,7 @@ def fetch_service_account_data():
                 remaining = (expiry_time - datetime.now(timezone.utc)).days
                 expiry_str = expiry_time.strftime("%d %b %Y")  # eg: 30 Jan 2027
                 color = "🟥" if remaining <= 10 else "🟩"
-                report += f"{color} {email} | Key: {key_id} | Expires in: {remaining} days | {expiry_str}\n"
+                report += f"{color} {email} | Key: {key_id} | Expires in: {remaining} days | Expiry Date: {expiry_str}\n"
             else:
                 report += f"🟨 {email} | Key: {key_id} | No expiry set\n"
 
