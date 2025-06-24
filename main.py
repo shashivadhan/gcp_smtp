@@ -5,7 +5,6 @@ from email.message import EmailMessage
 from googleapiclient.discovery import build
 from google.auth import default
 
-
 def fetch_service_account_data():
     credentials, project_id = default()
     service = build("iam", "v1", credentials=credentials)
@@ -15,7 +14,7 @@ def fetch_service_account_data():
     ).execute()
 
     report = f"🚀 GCP Service Account Key Report\n📅 Timestamp: {datetime.now(timezone.utc)}\n"
-    report += "-" * 40 + "\n"
+    report += "-" * 80 + "\n"
 
     for sa in accounts.get("accounts", []):
         email = sa["email"]
@@ -33,8 +32,9 @@ def fetch_service_account_data():
             if expiry:
                 expiry_time = datetime.fromisoformat(expiry.replace("Z", "+00:00"))
                 remaining = (expiry_time - datetime.now(timezone.utc)).days
+                expiry_str = expiry_time.strftime("%d %b %Y")  # eg: 30 Jan 2027
                 color = "🟥" if remaining <= 10 else "🟩"
-                report += f"{color} {email} | Key: {key_id} | Expires in: {remaining} days\n"
+                report += f"{color} {email} | Key: {key_id} | Expires in: {remaining} days | {expiry_str}\n"
             else:
                 report += f"🟨 {email} | Key: {key_id} | No expiry set\n"
 
@@ -55,7 +55,7 @@ def send_notification(event, context):
         email.set_content(report)
         email["Subject"] = "🚨 GCP Service Account Key Expiry Audit 🚨"
         email["From"] = sender
-        email["To"] = ", ".join(recipients)  # ✅ Proper format
+        email["To"] = ", ".join(recipients)
 
         with smtplib.SMTP_SSL(smtp_server, 465) as smtp:
             smtp.login(username, password)
